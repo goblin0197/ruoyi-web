@@ -13,7 +13,10 @@ interface BaseResponse {
 }
 
 export const request = hookFetch.create<BaseResponse, 'data' | 'rows'>({
-  baseURL: import.meta.env.VITE_API_URL,
+  // 走相对路径由 dev server（vite proxy）/ 生产 nginx 转发到后端，
+  // 避免浏览器直连后端 IP：局域网跨设备访问、代理/TUN 模式下都会出问题。
+  // dev 为 /dev-api，生产为 /prod-api（见 .env.*）
+  baseURL: import.meta.env.VITE_WEB_BASE_API,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,6 +31,18 @@ function jwtPlugin(): HookFetchPlugin<BaseResponse> {
       config.headers = new Headers(config.headers);
       config.headers.set('authorization', `Bearer ${userStore.token}`);
       config.headers.set('ClientID', import.meta.env.VITE_CLIENT_ID);
+      // AI 能力中心（/ai/center/**）免登录，后端通过 X-USERINFO 识别用户（ERP 网关注入）。
+      // ruoyi-web 已登录，此处直接注入当前登录用户，格式与后端 RequestUserId 解析器约定一致。
+      const url = String(config.url ?? '');
+      if (url.includes('/ai/center')) {
+        const userId = userStore.userInfo?.userId;
+        if (userId != null) {
+          config.headers.set(
+            'X-USERINFO',
+            encodeURIComponent(JSON.stringify({ id: userId })),
+          );
+        }
+      }
       return config;
     },
     afterResponse: async (response) => {

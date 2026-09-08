@@ -35,6 +35,17 @@ export const layoutRouter: RouteRecordRaw[] = [
           icon: 'Grid',
         },
       },
+      {
+        path: '/ai-center',
+        name: 'aiCenter',
+        component: () => import('@/pages/ai-center/index.vue'),
+        meta: {
+          title: 'AI 工具箱',
+          icon: 'MagicStick',
+          // 长页面，需要主内容区纵向滚动（见 Main 组件的 isPageScroll）
+          isPageScroll: true,
+        },
+      },
     ],
   },
 ];

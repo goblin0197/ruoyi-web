@@ -26,7 +26,10 @@ provide('refresh', refreshMainPage);
 <template>
   <el-main
     class="layout-main"
-    :class="{ 'layout-main-overfow-hidden': useroute.meta.isDefaultChat }"
+    :class="{
+      'layout-main-overfow-hidden': useroute.meta.isDefaultChat,
+      'layout-main-page-scroll': useroute.meta.isPageScroll,
+    }"
   >
     <router-view v-slot="{ Component, route }">
       <transition :name="transitionName" mode="out-in" appear>
@@ -41,6 +44,12 @@ provide('refresh', refreshMainPage);
 <style scoped lang="scss">
 .layout-main-overfow-hidden {
   overflow: hidden;
+}
+
+/* 长页面模式（如 AI 工具箱）：主内容区纵向滚动，顶层布局保持整屏 */
+.layout-main-page-scroll {
+  height: 100%;
+  overflow-y: auto;
 }
 
 /* 默认聊天页面：上下滑动动画 */

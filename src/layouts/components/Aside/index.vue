@@ -80,6 +80,13 @@ function handleOpenAppMarket() {
   router.replace({ name: 'appMarket' });
 }
 
+// AI 工具箱
+const isAiCenterActive = computed(() => route.name === 'aiCenter');
+
+function handleOpenAiCenter() {
+  router.replace({ name: 'aiCenter' });
+}
+
 function handleChange(item: ConversationItem<ChatSessionVo>) {
   sessionStore.setCurrentSession(item);
   router.replace({
@@ -225,6 +232,13 @@ function handleMenuCommand(command: string, item: ConversationItem<ChatSessionVo
             <Grid />
           </el-icon>
           <span>应用市场</span>
+        </div>
+
+        <div class="workbench-entry" :class="{ active: isAiCenterActive }" @click="handleOpenAiCenter">
+          <el-icon>
+            <MagicStick />
+          </el-icon>
+          <span>AI 工具箱</span>
         </div>
 
         <div class="divider" />

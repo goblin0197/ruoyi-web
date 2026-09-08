@@ -26,6 +26,17 @@ export default defineConfig((cnf) => {
     },
     // 浏览器缓存问题
     server: {
+      // 监听所有网卡，允许局域网通过本机 IP 访问（如 http://192.168.1.100:5173）
+      host: true,
+      proxy: {
+        // 后端 API 统一走 dev server 转发，浏览器只请求同源地址，
+        // 局域网跨设备访问不再直连后端 IP（127.0.0.1 在客户端指向客户端自己）
+        '/dev-api': {
+          target: 'http://127.0.0.1:6039',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/dev-api/, ''),
+        },
+      },
       headers: {
         'Cache-Control': 'no-store',
       },

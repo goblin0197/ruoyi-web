@@ -38,6 +38,7 @@
     "echarts": "^6.0.0",
     "element-plus": "^2.10.4",
     "hook-fetch": "2.0.4-beta.1",
+    "marked": "^16.4.2",
     "nprogress": "^0.2.0",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.4.1",
